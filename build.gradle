@@ -1,3 +1,5 @@
+import java.time.Instant
+
 plugins {
 	id 'org.springframework.boot' version '2.2.1.BUILD-SNAPSHOT'
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
@@ -34,6 +36,24 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+}
+task createMigrationFile {
+	doLast {
+		def defaultSuffix = "rename_this"
+		def suffix = (project.hasProperty('f') && f?.trim()) ? f : defaultSuffix
+		suffix = (project.hasProperty('c') && c?.trim()) ? "create_table_${c}" : suffix
+
+		def ddl = (project.hasProperty('c') && c?.trim()) ? "CREATE TABLE hff_${c} (\n);" : "--Write the SQL script here"
+
+		Instant instant = Instant.now()
+		Long millisecond = instant.toEpochMilli()
+
+		String path = "${projectDir}/src/main/resources/db/migration/"
+		String filename = "v${millisecond}__${suffix}.sql"
+
+		file(path + filename).text = ddl
+		println "Done creating ${filename}"
 	}
 }
 
