@@ -9,5 +9,4 @@ class JaversScenarioApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
