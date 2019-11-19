@@ -17,4 +17,8 @@ public class Todo {
     private Long id;
 
     private String title;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
 }
