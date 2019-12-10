@@ -18,21 +18,16 @@ import java.util.Optional;
 public class TodoController {
 
     @Autowired
-    private TodoRepository todoRepository;
-
-    @Autowired
     private TodoService todoService;
 
     @GetMapping
     public List<Todo> index() {
-        return todoRepository.findAll();
+        return todoService.findAll();
     }
 
     @GetMapping(value = "/{id}")
     public Todo showTodo(@PathVariable Long id) throws Exception{
-        return todoRepository
-            .findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return todoService.findById(id);
     }
 
     @PostMapping
