@@ -1,4 +1,4 @@
-package com.ayushkamadji.javersscenario.JaversScenario.todo.form;
+package com.ayushkamadji.javersscenario.JaversScenario.project.form;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -10,9 +10,8 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class TodoForm {
-    @NotBlank
-    private String title;
+public class ProjectForm {
 
-    private Long projectId;
+    @NotBlank
+    private String name;
 }

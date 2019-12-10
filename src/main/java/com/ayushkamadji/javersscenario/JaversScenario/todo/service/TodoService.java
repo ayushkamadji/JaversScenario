@@ -1,6 +1,9 @@
 package com.ayushkamadji.javersscenario.JaversScenario.todo.service;
 
+import com.ayushkamadji.javersscenario.JaversScenario.entity.Project;
 import com.ayushkamadji.javersscenario.JaversScenario.entity.Todo;
+import com.ayushkamadji.javersscenario.JaversScenario.project.service.ProjectService;
+import com.ayushkamadji.javersscenario.JaversScenario.repository.ProjectRepository;
 import com.ayushkamadji.javersscenario.JaversScenario.repository.TodoRepository;
 import com.ayushkamadji.javersscenario.JaversScenario.todo.form.TodoForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Objects.isNull;
 
@@ -17,6 +21,9 @@ import static java.util.Objects.isNull;
 public class TodoService {
     @Autowired
     private TodoRepository todoRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
 
     @Transactional
     public List<Todo> findAll() {
@@ -27,6 +34,11 @@ public class TodoService {
     public Todo create(TodoForm todoForm) {
         Todo todo = new Todo();
         todo.setTitle(todoForm.getTitle());
+        if (Optional.of(todoForm.getProjectId()).isPresent()) {
+            Project project = projectRepository.findById(todoForm.getProjectId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY));
+            todo.setProject(project);
+        }
         return todoRepository.save(todo);
     }
 
@@ -41,6 +53,12 @@ public class TodoService {
                 todo.getTitle() :
                 todoForm.getTitle()
         );
+
+        if (Optional.of(todoForm.getProjectId()).isPresent()) {
+            Project project = projectRepository.findById(todoForm.getProjectId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY));
+            todo.setProject(project);
+        }
 
         return todoRepository.save(todo);
     }
