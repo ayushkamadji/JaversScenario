@@ -30,4 +30,9 @@ public class ProjectController {
     public Project createProject(@Valid @RequestBody ProjectForm projectForm) {
         return projectService.create(projectForm);
     }
+
+    @PatchMapping(value = "/{id}")
+    public Project updateProject(@PathVariable Long id, @RequestBody ProjectForm projectForm) throws Exception {
+        return projectService.update(id, projectForm);
+    }
 }

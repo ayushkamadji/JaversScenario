@@ -11,6 +11,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+import static java.util.Objects.isNull;
+
 @Service
 public class ProjectService {
 
@@ -32,5 +34,20 @@ public class ProjectService {
         Project newProject = new Project();
         newProject.setName(form.getName());
         return projectRepository.save(newProject);
+    }
+
+    @Transactional
+    public Project update(Long id, ProjectForm projectForm) throws Exception {
+        Project project = projectRepository
+            .findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        project.setName(
+            isNull(projectForm.getName()) || projectForm.getName().trim().isEmpty() ?
+                project.getName() :
+                projectForm.getName()
+        );
+
+        return projectRepository.save(project);
     }
 }
