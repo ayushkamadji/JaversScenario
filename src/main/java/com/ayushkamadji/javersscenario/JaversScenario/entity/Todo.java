@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "todo")
+@Inheritance( strategy = InheritanceType.JOINED )
 public class Todo {
 
     @Id
